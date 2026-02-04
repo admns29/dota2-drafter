@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dota 2 Drafter</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <header>
+        <h1>Dota 2 Drafter</h1>
+        <div class="controls">
+          <button id="syncHeroes" class="btn btn-primary">
+            Sync Heroes from API
+          </button>
+          <button id="startDraft" class="btn btn-success">
+            Start New Draft
+          </button>
+        </div>
+      </header>
+
+      <main>
+        <div class="draft-container">
+          <!-- Radiant Team Panel -->
+          <div class="team-panel radiant">
+            <h2>Radiant</h2>
+            <div class="picks">
+              <h3>Picks</h3>
+              <div id="radiantPicks" class="hero-slots">
+                <div class="hero-slot empty"></div>
+                <div class="hero-slot empty"></div>
+                <div class="hero-slot empty"></div>
+                <div class="hero-slot empty"></div>
+                <div class="hero-slot empty"></div>
+              </div>
+            </div>
+            <div class="bans">
+              <h3>Bans</h3>
+              <div id="radiantBans" class="hero-slots small">
+                <div class="hero-slot empty"></div>
+                <div class="hero-slot empty"></div>
+                <div class="hero-slot empty"></div>
+                <div class="hero-slot empty"></div>
+                <div class="hero-slot empty"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Draft Status -->
+          <div class="draft-status">
+            <div id="currentTurn" class="turn-indicator">
+              <p>Load or start a draft to begin</p>
+            </div>
+            <div class="phase-indicator">
+              <span id="phaseText">Waiting...</span>
+            </div>
+          </div>
+
+          <!-- Dire Team Panel -->
+          <div class="team-panel dire">
+            <h2>Dire</h2>
+            <div class="picks">
+              <h3>Picks</h3>
+              <div id="direPicks" class="hero-slots">
+                <div class="hero-slot empty"></div>
+                <div class="hero-slot empty"></div>
+                <div class="hero-slot empty"></div>
+                <div class="hero-slot empty"></div>
+                <div class="hero-slot empty"></div>
+              </div>
+            </div>
+            <div class="bans">
+              <h3>Bans</h3>
+              <div id="direBans" class="hero-slots small">
+                <div class="hero-slot empty"></div>
+                <div class="hero-slot empty"></div>
+                <div class="hero-slot empty"></div>
+                <div class="hero-slot empty"></div>
+                <div class="hero-slot empty"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Hero Grid -->
+        <div class="hero-grid-container">
+          <h2>Heroes</h2>
+          <div class="filter-controls">
+            <input type="text" id="searchHero" placeholder="Search heroes..." />
+            <select id="filterAttribute">
+              <option value="">All Attributes</option>
+              <option value="STRENGTH">Strength</option>
+              <option value="AGILITY">Agility</option>
+              <option value="INTELLIGENCE">Intelligence</option>
+              <option value="UNIVERSAL">Universal</option>
+            </select>
+          </div>
+          <div id="heroGrid" class="hero-grid">
+            <p class="loading">Loading heroes...</p>
+          </div>
+        </div>
+      </main>
+    </div>
+
+    <script src="app.js"></script>
+  </body>
+</html>
