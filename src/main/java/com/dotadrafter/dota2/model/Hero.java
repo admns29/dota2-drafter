@@ -14,7 +14,6 @@ import java.util.List;
 public class Hero {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(unique = true, nullable = false)
@@ -30,6 +29,6 @@ public class Hero {
     private double baseStrength;
     private double baseAgility;
     private double baseIntelligence;
-    
+
     private String imageUrl; // For UI display
 }

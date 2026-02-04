@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import java.util.Arrays;
 import java.util.List;
 
 @Component
@@ -19,11 +20,12 @@ public class OpenDotaClient {
     }
 
     public List<HeroStatsDto> fetchHeroStats() {
-        return webClient.get()
+        HeroStatsDto[] heroArray = webClient.get()
                 .uri("/api/heroStats")
                 .retrieve()
                 .bodyToMono(HeroStatsDto[].class)
-                .map(List::of)
-                .block(); // Blocking call for simplicity
+                .block();
+
+        return heroArray != null ? Arrays.asList(heroArray) : List.of();
     }
 }
