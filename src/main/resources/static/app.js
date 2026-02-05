@@ -155,26 +155,81 @@ function renderHeroGrid() {
     return;
   }
 
-  heroGrid.innerHTML = filteredHeroes
-    .map((hero) => {
-      const isPicked = isHeroPicked(hero.id);
-      const isBanned = isHeroBanned(hero.id);
-      const statusClass = isPicked ? "picked" : isBanned ? "banned" : "";
+  // Group heroes by attribute
+  const attributes = {
+    STRENGTH: [],
+    AGILITY: [],
+    INTELLIGENCE: [],
+    UNIVERSAL: [],
+  };
 
-      return `
+  filteredHeroes.forEach((hero) => {
+    if (attributes[hero.primaryAttribute]) {
+      attributes[hero.primaryAttribute].push(hero);
+    }
+  });
+
+  // Helper to generate hero card HTML
+  const generateHeroCard = (hero) => {
+    const isPicked = isHeroPicked(hero.id);
+    const isBanned = isHeroBanned(hero.id);
+    const statusClass = isPicked ? "picked" : isBanned ? "banned" : "";
+
+    return `
             <div class="hero-card ${statusClass}" data-hero-id="${hero.id}" onclick="handleHeroClick(${hero.id})">
                 <img src="${hero.imageUrl}" alt="${hero.name}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22120%22%3E%3Crect width=%22100%22 height=%22120%22 fill=%22%23333%22/%3E%3Ctext x=%2250%%22 y=%2250%%22 text-anchor=%22middle%22 fill=%22%23666%22 font-size=%2216%22%3ENo Image%3C/text%3E%3C/svg%3E'">
                 <div class="hero-info">
                     <div class="hero-name">${hero.name}</div>
-                    <div class="hero-attr ${hero.primaryAttribute}">${hero.primaryAttribute}</div>
                 </div>
             </div>
         `;
+  };
+
+  // Build grid HTML with columns
+  const columnsHtml = Object.entries(attributes)
+    .map(([attr, heroList]) => {
+      // Don't render empty columns if we are filtering by specific attribute
+      if (
+        selectedAttribute &&
+        attr !== selectedAttribute &&
+        heroList.length === 0
+      ) {
+        return "";
+      }
+
+      const icon = getAttributeIcon(attr);
+      const heroCardsHtml = heroList.map(generateHeroCard).join("");
+
+      return `
+        <div class="attribute-column ${attr.toLowerCase()}">
+            <h3>${icon} ${attr}</h3>
+            <div class="column-heroes">
+                ${heroCardsHtml}
+            </div>
+        </div>
+      `;
     })
     .join("");
+
+  heroGrid.innerHTML = columnsHtml;
 }
 
-// NEW: Efficient update function that only changes hero card classes
+function getAttributeIcon(attr) {
+  switch (attr) {
+    case "STRENGTH":
+      return "💪";
+    case "AGILITY":
+      return "🦶";
+    case "INTELLIGENCE":
+      return "🧠";
+    case "UNIVERSAL":
+      return "✨";
+    default:
+      return "";
+  }
+}
+
+// Efficient update function that only changes hero card classes
 function updateHeroCardStatuses() {
   const heroCards = document.querySelectorAll(".hero-card");
   heroCards.forEach((card) => {
