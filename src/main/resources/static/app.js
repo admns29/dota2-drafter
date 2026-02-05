@@ -75,6 +75,7 @@ async function startNewDraft() {
 
     currentDraft = await response.json();
     updateDraftUI();
+    updateHeroCardStatuses(); // Update hero card statuses instead of full re-render
   } catch (error) {
     alert("Failed to start draft: " + error.message);
     console.error("Error starting draft:", error);
@@ -95,11 +96,14 @@ async function pickHero(heroId) {
       },
     );
 
-    if (!response.ok) throw new Error("Failed to pick hero");
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(errorText || "Failed to pick hero");
+    }
 
     currentDraft = await response.json();
     updateDraftUI();
-    renderHeroGrid();
+    updateHeroCardStatuses(); // Only update statuses, not full re-render
   } catch (error) {
     alert("Failed to pick hero: " + error.message);
     console.error("Error picking hero:", error);
@@ -120,11 +124,14 @@ async function banHero(heroId) {
       },
     );
 
-    if (!response.ok) throw new Error("Failed to ban hero");
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(errorText || "Failed to ban hero");
+    }
 
     currentDraft = await response.json();
     updateDraftUI();
-    renderHeroGrid();
+    updateHeroCardStatuses(); // Only update statuses, not full re-render
   } catch (error) {
     alert("Failed to ban hero: " + error.message);
     console.error("Error banning hero:", error);
@@ -155,8 +162,8 @@ function renderHeroGrid() {
       const statusClass = isPicked ? "picked" : isBanned ? "banned" : "";
 
       return `
-            <div class="hero-card ${statusClass}" onclick="handleHeroClick(${hero.id})">
-                <img src="${hero.imageUrl}" alt="${hero.name}" onerror="this.src='data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22120%22><rect width=%22100%22 height=%22120%22 fill=%22%23333%22/><text x=%2250%%22 y=%2250%%22 text-anchor=%22middle%22 fill=%22%23666%22 font-size=%2216%22>No Image</text></svg>'">
+            <div class="hero-card ${statusClass}" data-hero-id="${hero.id}" onclick="handleHeroClick(${hero.id})">
+                <img src="${hero.imageUrl}" alt="${hero.name}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22120%22%3E%3Crect width=%22100%22 height=%22120%22 fill=%22%23333%22/%3E%3Ctext x=%2250%%22 y=%2250%%22 text-anchor=%22middle%22 fill=%22%23666%22 font-size=%2216%22%3ENo Image%3C/text%3E%3C/svg%3E'">
                 <div class="hero-info">
                     <div class="hero-name">${hero.name}</div>
                     <div class="hero-attr ${hero.primaryAttribute}">${hero.primaryAttribute}</div>
@@ -165,6 +172,26 @@ function renderHeroGrid() {
         `;
     })
     .join("");
+}
+
+// NEW: Efficient update function that only changes hero card classes
+function updateHeroCardStatuses() {
+  const heroCards = document.querySelectorAll(".hero-card");
+  heroCards.forEach((card) => {
+    const heroId = parseInt(card.getAttribute("data-hero-id"));
+    const isPicked = isHeroPicked(heroId);
+    const isBanned = isHeroBanned(heroId);
+
+    // Remove all status classes
+    card.classList.remove("picked", "banned");
+
+    // Add appropriate status class
+    if (isPicked) {
+      card.classList.add("picked");
+    } else if (isBanned) {
+      card.classList.add("banned");
+    }
+  });
 }
 
 function handleHeroClick(heroId) {

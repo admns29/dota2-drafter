@@ -19,16 +19,16 @@ public class DraftState {
 
     private LocalDateTime startTime = LocalDateTime.now();
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Hero> radiantPicks = new ArrayList<>();
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Hero> direPicks = new ArrayList<>();
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Hero> radiantBans = new ArrayList<>();
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     private List<Hero> direBans = new ArrayList<>();
 
     private boolean isRadiantTurn; // true = radiant, false = dire
