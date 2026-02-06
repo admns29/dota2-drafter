@@ -309,8 +309,8 @@ h1 {
 
 /* Adjust card size for the columns */
 .hero-card {
-    width: 80px;
-    /* Fixed width for better packing */
+    width: calc(25% - 10px);
+    /* Dynamic width for 4 cards per row */
     flex-grow: 0;
 }
 
@@ -357,16 +357,33 @@ h1 {
 }
 
 .hero-card .hero-info {
-    padding: 8px;
+    padding: 0;
 }
 
 .hero-card .hero-name {
-    font-size: 12px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.85);
+    color: #fff;
+    padding: 5px 2px;
+    text-align: center;
+    font-size: 11px;
     font-weight: 600;
-    margin-bottom: 4px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+
+    opacity: 0;
+    transform: translateY(100%);
+    transition: all 0.2s ease-in-out;
+}
+
+.hero-card:hover .hero-name {
+    opacity: 1;
+    transform: translateY(0);
+    visibility: visible;
 }
 
 .hero-card .hero-attr {
