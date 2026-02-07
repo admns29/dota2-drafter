@@ -170,16 +170,24 @@ function renderHeroGrid() {
   });
 
   // Helper to generate hero card HTML
+  const escapeHtml = (str) =>
+    String(str)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  // Helper to generate hero card HTML
   const generateHeroCard = (hero) => {
     const isPicked = isHeroPicked(hero.id);
     const isBanned = isHeroBanned(hero.id);
     const statusClass = isPicked ? "picked" : isBanned ? "banned" : "";
-
+    const safeName = escapeHtml(hero.name ?? "");
     return `
             <div class="hero-card ${statusClass}" data-hero-id="${hero.id}" onclick="handleHeroClick(${hero.id})">
-                <img src="${hero.imageUrl}" alt="${hero.name}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22120%22%3E%3Crect width=%22100%22 height=%22120%22 fill=%22%23333%22/%3E%3Ctext x=%2250%%22 y=%2250%%22 text-anchor=%22middle%22 fill=%22%23666%22 font-size=%2216%22%3ENo Image%3C/text%3E%3C/svg%3E'">
+                <img src="${hero.imageUrl}" alt="${safeName}" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22100%22 height=%22120%22%3E%3Crect width=%22100%22 height=%22120%22 fill=%22%23333%22/%3E%3Ctext x=%2250%%22 y=%2250%%22 text-anchor=%22middle%22 fill=%22%23666%22 font-size=%2216%22%3ENo Image%3C/text%3E%3C/svg%3E'">
                 <div class="hero-info">
-                    <div class="hero-name">${hero.name}</div>
+                    <div class="hero-name">${safeName}</div>
                 </div>
             </div>
         `;
