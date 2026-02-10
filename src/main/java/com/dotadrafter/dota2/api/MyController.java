@@ -2,6 +2,7 @@ package com.dotadrafter.dota2.api;
 
 import com.dotadrafter.dota2.model.DraftState;
 import com.dotadrafter.dota2.model.Hero;
+import com.dotadrafter.dota2.model.HeroMatchup;
 import com.dotadrafter.dota2.service.DraftService;
 import com.dotadrafter.dota2.service.HeroService;
 import org.slf4j.Logger;
@@ -61,5 +62,26 @@ public class MyController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error syncing heroes: " + e.getMessage());
         }
+    }
+
+    // Phase 2: Sync matchups from OpenDota API
+    @PostMapping("/heroes/{id}/matchups")
+    public ResponseEntity<String> syncMatchups(@PathVariable Long id) {
+        try {
+            log.info("Starting matchup sync for hero {} from OpenDota API...", id);
+            int count = heroService.syncHeroMatchupsFromApi(id);
+            log.info("Successfully synced {} matchups for hero {}", count, id);
+            return ResponseEntity.ok("Successfully synced " + count + " matchups from OpenDota API");
+        } catch (Exception e) {
+            log.error("Failed to sync matchups from API", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error syncing matchups: " + e.getMessage());
+        }
+    }
+
+    // Phase 2: Display all matchups
+    @GetMapping("/heroes/{id}/matchups")
+    public List<HeroMatchup> getAllMatchups(@PathVariable Long id) {
+        return heroService.getAllMatchups(id);
     }
 }
