@@ -31,9 +31,9 @@ public class OpenDotaClient {
         return heroArray != null ? Arrays.asList(heroArray) : List.of();
     }
 
-    public List<MatchupDto> fetchMatchups(String patch, String rankTier) {
+    public List<MatchupDto> fetchMatchups(Long heroId) {
         MatchupDto[] matchupArray = webClient.get()
-                .uri("/api/heroes/matchups?patch=" + patch + "&rank_tier=" + rankTier)
+                .uri("/api/heroes/{heroId}/matchups", heroId)
                 .retrieve()
                 .bodyToMono(MatchupDto[].class)
                 .block();
