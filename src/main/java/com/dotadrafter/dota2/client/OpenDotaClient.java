@@ -32,11 +32,26 @@ public class OpenDotaClient {
     }
 
     public List<MatchupDto> fetchMatchups(Long heroId) {
-        MatchupDto[] matchupArray = webClient.get()
-                .uri("/api/heroes/{heroId}/matchups", heroId)
-                .retrieve()
-                .bodyToMono(MatchupDto[].class)
-                .block();
+        return fetchMatchups(heroId, null);
+    }
+
+    public List<MatchupDto> fetchMatchups(Long heroId, Integer rankTier) {
+        String uri = "/api/heroes/{heroId}/matchups";
+        
+        MatchupDto[] matchupArray;
+        if (rankTier != null) {
+            matchupArray = webClient.get()
+                    .uri(uri + "?rank_tier={rankTier}", heroId, rankTier)
+                    .retrieve()
+                    .bodyToMono(MatchupDto[].class)
+                    .block();
+        } else {
+            matchupArray = webClient.get()
+                    .uri(uri, heroId)
+                    .retrieve()
+                    .bodyToMono(MatchupDto[].class)
+                    .block();
+        }
 
         return matchupArray != null ? Arrays.asList(matchupArray) : List.of();
     }
