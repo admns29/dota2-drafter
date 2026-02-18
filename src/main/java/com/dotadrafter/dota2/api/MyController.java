@@ -65,7 +65,7 @@ public class MyController {
     }
 
     // Phase 2: Sync matchups from OpenDota API
-    @PostMapping("/heroes/{id}/matchups")
+    @PostMapping("/heroes/{id}/matchups/sync")
     public ResponseEntity<String> syncMatchups(@PathVariable Long id) {
         try {
             log.info("Starting matchup sync for hero {} from OpenDota API...", id);
