@@ -228,7 +228,7 @@ class MyControllerIntegrationTest {
         assertEquals(0, heroMatchupRepository.findByHeroId(testHero1.getId()).size());
 
         // ACT: Call the sync endpoint
-        mockMvc.perform(post("/api/heroes/{id}/matchups", testHero1.getId())
+        mockMvc.perform(post("/api/heroes/{id}/matchups/sync", testHero1.getId())
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(content().string(containsString("Successfully synced 2 matchups from OpenDota API")));
@@ -258,7 +258,7 @@ class MyControllerIntegrationTest {
     @DisplayName("POST /api/heroes/{id}/matchups should return error when hero not found")
     void testSyncMatchupsHeroNotFound() throws Exception {
         // ACT & ASSERT: Call endpoint with non-existent hero
-        mockMvc.perform(post("/api/heroes/{id}/matchups", 99999L)
+        mockMvc.perform(post("/api/heroes/{id}/matchups/sync", 99999L)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isInternalServerError())
                 .andExpect(content().string(containsString("Error syncing matchups")));
