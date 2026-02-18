@@ -1,5 +1,6 @@
 package com.dotadrafter.dota2.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,6 +9,7 @@ import lombok.AllArgsConstructor;
 import java.util.List;
 
 @Entity
+@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
