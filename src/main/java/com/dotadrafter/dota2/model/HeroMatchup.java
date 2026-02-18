@@ -1,5 +1,6 @@
 package com.dotadrafter.dota2.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -26,10 +27,12 @@ public class HeroMatchup {
 
         @ManyToOne(fetch = FetchType.LAZY)
         @JoinColumn(name = "hero_id", nullable = false)
+        @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
         private Hero hero;
 
         @ManyToOne(fetch = FetchType.LAZY)
         @JoinColumn(name = "matchup_hero_id", nullable = false)
+        @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
         private Hero matchupHero;
 
         // Advantage percentage (e.g., 4.5 for +4.5% winrate)
