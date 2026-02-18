@@ -9,6 +9,7 @@ import com.dotadrafter.dota2.model.HeroMatchup;
 import com.dotadrafter.dota2.repository.HeroMatchupRepository;
 import com.dotadrafter.dota2.repository.HeroRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.Duration;
 import java.util.ArrayList;
@@ -79,6 +80,7 @@ public class HeroService {
     private static final int ANCIENT_RANK_TIER = 60;
     private static final Duration API_CALL_DELAY = Duration.ofMillis(1100); // 1.1 seconds to respect rate limits
 
+    @Transactional
     public int syncHeroMatchupsFromApi(Long heroId) {
         Hero hero = heroRepository.findById(heroId)
                 .orElseThrow(() -> new RuntimeException("Hero not found: " + heroId));
