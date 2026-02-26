@@ -12,9 +12,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+// REST controller for Dota 2 draft application
+// Provides endpoints for hero data and draft management
 @RestController
 @RequestMapping("/api")
-@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*")  // Allow cross-origin requests for frontend
 public class MyController {
 
     private static final Logger log = LoggerFactory.getLogger(MyController.class);
@@ -26,29 +28,36 @@ public class MyController {
         this.draftService = draftService;
     }
 
-    // Phase 1: Display all heroes
+    // GET /api/heroes - Returns all available heroes
+    // Used for Phase 1: displaying hero selection UI
     @GetMapping("/heroes")
     public List<Hero> getAllHeroes() {
         return heroService.getAllHeroes();
     }
 
-    // Phase 1: Mechanics
+    // POST /api/draft/start - Starts a new draft session
+    // Initializes draft state with Radiant team going first
     @PostMapping("/draft/start")
     public DraftState startDraft() {
         return draftService.startNewDraft();
     }
 
+    // POST /api/draft/{id}/pick/{heroId} - Picks a hero for current team
+    // Adds hero to the team whose turn it is during pick phase
     @PostMapping("/draft/{id}/pick/{heroId}")
     public DraftState pickHero(@PathVariable Long id, @PathVariable Long heroId) {
         return draftService.pickHero(id, heroId);
     }
 
+    // POST /api/draft/{id}/ban/{heroId} - Bans a hero for current team
+    // Removes hero from availability during ban phase
     @PostMapping("/draft/{id}/ban/{heroId}")
     public DraftState banHero(@PathVariable Long id, @PathVariable Long heroId) {
         return draftService.banHero(id, heroId);
     }
 
-    // Phase 2: Sync heroes from OpenDota API
+    // POST /api/heroes/sync - Synchronizes heroes from OpenDota API
+    // Fetches latest hero data from external API and saves to database
     @PostMapping("/heroes/sync")
     public ResponseEntity<String> syncHeroes() {
         try {
