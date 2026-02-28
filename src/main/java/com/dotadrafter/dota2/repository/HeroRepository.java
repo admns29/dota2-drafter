@@ -8,8 +8,12 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
+// Repository interface for Hero entity
+// Provides database operations for hero data using Spring Data JPA
 @Repository
 public interface HeroRepository extends JpaRepository<Hero, Long> {
+    // Find a hero by exact name match
     Optional<Hero> findByName(String name);
+    // Find all heroes with a specific primary attribute
     List<Hero> findByPrimaryAttribute(HeroAttribute attribute);
 }

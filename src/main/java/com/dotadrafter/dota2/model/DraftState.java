@@ -8,33 +8,44 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+// Entity representing the state of a hero draft (Captain's Mode)
+// Tracks picks, bans, current turn, and draft completion status
 @Entity
 @Data
 @NoArgsConstructor
 public class DraftState {
 
+    // Auto-generated primary key
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    // Timestamp when the draft was started
     private LocalDateTime startTime = LocalDateTime.now();
 
+    // Heroes picked by Radiant team
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Hero> radiantPicks = new ArrayList<>();
 
+    // Heroes picked by Dire team
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Hero> direPicks = new ArrayList<>();
 
+    // Heroes banned by Radiant team
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Hero> radiantBans = new ArrayList<>();
 
+    // Heroes banned by Dire team
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Hero> direBans = new ArrayList<>();
 
-    private boolean isRadiantTurn; // true = radiant, false = dire
-    private boolean isPickPhase; // true = pick, false = ban
+    // Flag indicating whose turn it is: true = Radiant, false = Dire
+    private boolean isRadiantTurn;
+    // Flag indicating current phase: true = pick phase, false = ban phase
+    private boolean isPickPhase;
 
-    // Status tracking
+    // Flag indicating if draft has been completed
     private boolean isComplete = false;
-    private int currentTurnIndex = 0; // To track sequence in Captain's Mode
+    // Counter tracking the turn sequence in Captain's Mode draft order
+    private int currentTurnIndex = 0;
 }

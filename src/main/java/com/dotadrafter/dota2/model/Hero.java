@@ -8,6 +8,8 @@ import lombok.AllArgsConstructor;
 
 import java.util.List;
 
+// Entity representing a Dota 2 hero
+// Stores hero information including name, attributes, roles, and stats
 @Entity
 @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
 @Data
@@ -15,22 +17,27 @@ import java.util.List;
 @AllArgsConstructor
 public class Hero {
 
+    // Unique identifier matching OpenDota's hero ID
     @Id
     private Long id;
 
+    // Display name of the hero (e.g., "npc_dota_hero_axe")
     @Column(unique = true, nullable = false)
     private String name;
 
+    // Primary attribute determining stat growth (STR/AGI/INT/UNIVERSAL)
     @Enumerated(EnumType.STRING)
     private HeroAttribute primaryAttribute;
 
+    // List of roles this hero can play (e.g., Carry, Support, Initiator)
     @ElementCollection
-    private List<String> roles; // Carry, Support, etc.
+    private List<String> roles;
 
-    // Phase 2: Base Stats
+    // Base stats at level 1 - determines starting attributes
     private double baseStrength;
     private double baseAgility;
     private double baseIntelligence;
 
-    private String imageUrl; // For UI display
+    // URL to hero image for UI display
+    private String imageUrl;
 }
